@@ -58,8 +58,11 @@ optional arguments:
 ```bash
 # Get base64 auth String:
 # echo -n -e "\000info@myserver.com\000MYPASSWORD" | base64
+#
 
 openssl s_client -starttls smtp -crlf -connect mail.myserver.com:587 -tls1_2
+
+EHLO myserver.com
 
 AUTH PLAIN <YOU_BASE_64_STRING>
 
