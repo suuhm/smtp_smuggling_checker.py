@@ -11,7 +11,8 @@ https://sec-consult.com/blog/detail/smtp-smuggling-spoofing-e-mails-worldwide/
 ### Beware this is alpha POC !! tested with postfix and python3
 
 #### Testing of postfix mailserver for example (localhost port 25 auth plain login(optinal)):
-![grafik](https://github.com/suuhm/smtp_smuggling_checker.py/assets/11504990/947168e7-ae9e-4b70-bbb1-2595e44f9aa8)
+![grafik](https://github.com/suuhm/smtp_smuggling_checker.py/assets/11504990/f46c47ed-8cd7-4395-9d2e-12589a505e21)
+
 
 #### Testing these 11 payload strings:
 ```bash
