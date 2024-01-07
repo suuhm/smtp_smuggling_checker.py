@@ -50,7 +50,7 @@ https://www.postfix.org/smtp-smuggling.html
     SMTP Smuggle PoC Script v0.1 for checking mailservers - 2024 - by suuhmer
 
     
-usage: smtp_amuggler_pox.py [-h] [--server SERVER] [--port PORT] [--user USER] [--rcpt RCPT] [--mode MODE]
+usage: smtp_amuggler_poc.py [-h] [--server SERVER] [--port PORT] [--user USER] [--rcpt RCPT] [--mode MODE]
 
 Send mail with TLS und AUTH PLAIN.
 
