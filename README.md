@@ -58,8 +58,16 @@ options:
 > 
 <hr>
 
+![grafik](https://github.com/suuhm/smtp_smuggling_checker.py/assets/11504990/4891d7ef-ecb8-4428-9e01-345eb236b528)
+
+
 ### Testing of postfix mailserver for example (localhost port 25 auth plain login (optional)):
 ![grafik](https://github.com/suuhm/smtp_smuggling_checker.py/assets/11504990/f46c47ed-8cd7-4395-9d2e-12589a505e21)
+
+### Extern login via TLS and PLAIN AUTH with getting MX servers
+
+![grafik](https://github.com/suuhm/smtp_smuggling_checker.py/assets/11504990/7c182b91-4795-47da-8454-6bcd278f8d93)
+
 
 <hr>
 
