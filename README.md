@@ -22,8 +22,8 @@ https://www.postfix.org/smtp-smuggling.html
     
     SMTP Smuggle PoC Script v0.1 for checking mailservers - 2024 - by suuhmer
 
-    
-usage: smtp_poc.py [-h] [--server SERVER] [--port PORT] [--user USER] [--rcpt RCPT] [--mode MODE] [--forcetls]
+ 
+usage: smtp_poc.py [-h] [--server SERVER] [--port PORT] [--user USER] [--rcpt RCPT] [--mode MODE] [--forcetls] [--listeod]
 
 Test you mailserver for SMTP Smuggle /w STARTTLS und AUTH PLAIN login.
 
@@ -35,6 +35,8 @@ options:
   --rcpt RCPT      rcpt address
   --mode MODE      Rawmode = raw or Default = def
   --forcetls       Force connection via SSL/TLS
+  --listeod        Lists end of data sequences
+
 
 ```
 
