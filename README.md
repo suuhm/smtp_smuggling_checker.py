@@ -1,5 +1,6 @@
 # smtp_smuggling_checker.py
-### smtp smuggling testing tool with tls / starttls support
+#### smtp smuggling testing / scanning tool with tls / starttls support.
+#### Tests 12 different end-of-data sequences in one run for pentest your mailservers
 
 ### Infos:
 > [!NOTE]
@@ -72,7 +73,7 @@ options:
 <hr>
 
 ### Testing these 12 payload strings:
-##### Smgggling Strings (0-11):
+#### Smugggling Strings (0-11):
 
 - 0 - smtp_smuggle_escape = '\r\n.\r'
 - 1 - smtp_smuggle_escape = '\r.\r'
@@ -89,6 +90,14 @@ options:
 
 <hr>
 
+## PoC fastmail still works
+
+By sending over my postfix server fastmail seems to be still vulnerable: (NULL Bytes: 09.01.2024)
+
+![grafik](https://github.com/suuhm/smtp_smuggling_checker.py/assets/11504990/f7b011e1-abea-4f02-bc44-059371e76d77)
+
+
+<hr>
 
 ### Using telnet / openssl client for TLS
 
