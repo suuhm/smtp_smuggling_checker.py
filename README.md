@@ -22,17 +22,18 @@ https://www.postfix.org/smtp-smuggling.html
     SMTP Smuggle PoC Script v0.1 for checking mailservers - 2024 - by suuhmer
 
     
-usage: smtp_smuggler_poc.py [-h] [--server SERVER] [--port PORT] [--user USER] [--rcpt RCPT] [--mode MODE]
+usage: smtp_poc.py [-h] [--server SERVER] [--port PORT] [--user USER] [--rcpt RCPT] [--mode MODE] [--forcetls]
 
-Send mail with TLS und AUTH PLAIN.
+Test you mailserver for SMTP Smuggle /w STARTTLS und AUTH PLAIN login.
 
 options:
   -h, --help       show this help message and exit
-  --server SERVER  SMTP-Servername DNS or IP
-  --port PORT      SMTP-Serverport (Use 5870000 for 587 NOSSL)
-  --user USER      SMTP-userername will automatically promts for pw
+  --server SERVER  SMTP-(Servername, Domain or IP
+  --port PORT      SMTP-Serverport (Use 5870000 for 587 NOSSL-FALLBACK)
+  --user USER      SMTP-userername
   --rcpt RCPT      rcpt address
   --mode MODE      Rawmode = raw or Default = def
+  --forcetls       Force connection via SSL/TLS
 
 ```
 
@@ -41,8 +42,12 @@ options:
 
 ```bash
 # Example : You have to setup the Parameters with the right values!
-#
-.\smtp_smuggler_poc.py --server mail.server.com --port 587 --user user@server.com --rcpt vic@server.com --mode def
+
+# Sending via extern SMTP server with STARTTLS support and PLAIN AUTH login (The asking for password will prompt!):
+.\smtp_smuggler_poc.py --server mail.server.com --port 587 --user user@yourserver.com --rcpt vic@yourserver.com --mode def --forcetls
+
+# Sending via local SMTP server with STARTTLS forced on port 25 and default login credential in RAW sending mode (telnet socket mode):
+.\smtp_smuggler_poc.py --server localhost --port 25 --rcpt vic@yourserver.com --mode raw --forcetls
 ```
 
 <hr>
